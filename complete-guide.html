@@ -194,7 +194,7 @@
             padding: 20px;
             border-radius: 8px;
             border-left: 4px solid #666;
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
             font-size: 0.95em;
             line-height: 1.6;
             margin: 15px 0;
@@ -265,10 +265,78 @@
             font-weight: 600;
         }
         
+        .back-to-main {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        
+        .back-to-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-group {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        /* 인쇄용 스타일 */
         @media print {
-            body { background: white; }
-            .container { box-shadow: none; }
-            .download-btn { display: none; }
+            body { 
+                background: white !important; 
+                padding: 0;
+            }
+            .container { 
+                box-shadow: none !important; 
+                border-radius: 0;
+            }
+            .download-btn, 
+            .back-to-main { 
+                display: none !important; 
+            }
+            .header {
+                background: #667eea !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            .section,
+            .pali-term,
+            .wisdom-stage,
+            .characteristics,
+            .quote,
+            .detailed-explanation,
+            .mind-states,
+            .sutra-quote {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            .section {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 2em;
+            }
+            .enlightenment-qualities {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -280,7 +348,11 @@
         </div>
         
         <div class="content">
-            <button class="download-btn" onclick="downloadPDF()">📥 PDF 다운로드</button>
+            <div class="btn-group">
+                <button class="download-btn" onclick="downloadPDF()">📥 PDF로 저장하기</button>
+                <a href="index.html" class="back-to-main">🏠 메인으로 돌아가기</a>
+                <a href="architecture.html" class="back-to-main">🏗️ 수행 아키텍처 보기</a>
+            </div>
             
             <div class="section">
                 <h2>1. 인간의 본성과 윤회에 대한 이해</h2>
@@ -740,34 +812,76 @@
                 
                 <h3>수행 가능성에 대한 격려</h3>
                 <div class="quote">
-                    "그렇게 용감해지면서 그런 말씀을 하실 겁니다. 꼰다냐 존자님한테 한 것처럼 고통을 끝낼 수 있습니다. 그렇게 알고 이 체험을 했던 수행자들 많으실 겁니다. 가지신 분들 있을 겁니다. 열심히 매 순간 노력하면 놓치지 않고 어떤 분들은 일주일 만에 됩니다."</div>
+                    "그렇게 용감해지면서 그런 말씀을 하실 겁니다. 꼰다냐 존자님한테 한 것처럼 고통을 끝낼 수 있습니다. 그렇게 알고 이 체험을 했던 수행자들 많으실 겁니다. 가지신 분들 있을 겁니다. 열심히 매 순간 노력하면 놓치지 않고 어떤 분들은 일주일 만에 됩니다."
+                </div>
                 
                 <h3>최종적 권유</h3>
                 <p>남의 말로 끝나는 것이 아니라 의심과 사견을 버리고 사는 상태가 되면 용감해질 거고 삶이 달라질 거요. 부처님 가르침에 8정도 4념처 실천 수행하면서 고귀한 법을 실천 수행하는 짜라 브라마짤리야가 되소서.</p>
+            </div>
+            
+            <div class="btn-group">
+                <button class="download-btn" onclick="downloadPDF()">📥 PDF로 저장하기</button>
+                <a href="index.html" class="back-to-main">🏠 메인으로 돌아가기</a>
+                <a href="architecture.html" class="back-to-main">🏗️ 수행 아키텍처 보기</a>
             </div>
         </div>
     </div>
 
     <script>
         function downloadPDF() {
-            const element = document.querySelector('.container');
-            const opt = {
-                margin: 0.5,
-                filename: '위빠사나_수행과_지혜계발_완전판.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-            };
-
-            if (typeof html2pdf !== 'undefined') {
-                html2pdf().set(opt).from(element).save();
-            } else {
-                alert('PDF 다운로드를 위해 브라우저의 인쇄 기능을 사용합니다. 인쇄 대화상자에서 "PDF로 저장"을 선택해주세요.');
-                window.print();
+            // 사용자에게 PDF 저장 방법 안내
+            const userConfirm = confirm(
+                "PDF로 저장하기 위해 브라우저의 인쇄 기능을 사용합니다.\n\n" +
+                "확인을 누르면 인쇄 대화상자가 열립니다.\n" +
+                "1. '대상' 또는 'Destination'에서 'PDF로 저장' 선택\n" +
+                "2. 원하는 위치에 저장\n\n" +
+                "계속하시겠습니까?"
+            );
+            
+            if (userConfirm) {
+                // 인쇄 스타일 최적화를 위한 CSS 추가
+                const printStyle = document.createElement('style');
+                printStyle.textContent = `
+                    @media print {
+                        .download-btn, .back-to-main { display: none !important; }
+                        body { background: white !important; padding: 0 !important; }
+                        .container { box-shadow: none !important; border-radius: 0 !important; }
+                        .header { background: #667eea !important; -webkit-print-color-adjust: exact !important; }
+                        .section { page-break-inside: avoid; }
+                        .pali-term, .wisdom-stage, .quote, .detailed-explanation { page-break-inside: avoid; }
+                    }
+                `;
+                document.head.appendChild(printStyle);
+                
+                // 약간의 지연 후 인쇄 실행
+                setTimeout(() => {
+                    window.print();
+                    // 인쇄 후 스타일 제거
+                    setTimeout(() => {
+                        document.head.removeChild(printStyle);
+                    }, 1000);
+                }, 500);
             }
         }
+        
+        // 페이지 로드 시 사용자 환경 확인
+        document.addEventListener('DOMContentLoaded', function() {
+            // 모바일 환경에서는 다운로드 버튼 텍스트 변경
+            if (window.innerWidth <= 768) {
+                const downloadBtns = document.querySelectorAll('.download-btn');
+                downloadBtns.forEach(btn => {
+                    btn.innerHTML = '📱 모바일에서 PDF 저장';
+                });
+            }
+        });
+        
+        // 키보드 단축키 지원
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                downloadPDF();
+            }
+        });
     </script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </body>
 </html>
